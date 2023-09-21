@@ -95,8 +95,8 @@ lazydev = Blueprint("lazydev", __name__)
 
 @lazydev.route("/lazy-developer", methods=["POST"])
 def getCommon():
-    print(classes)
-    print(query)
     classes = request.json["classes"]
     query = request.json["statements"]
+    print(classes)
+    print(query)
     return jsonify(getNextProbableWords(classes=classes, statements=query))
