@@ -32,6 +32,7 @@ def getNextProbableWords(
 
     res = {}
     for statement in statements:
+        print(statement)
         endsWithStop = statement[-1] == "."
         params = statement.split(".")
         filt = ""
