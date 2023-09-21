@@ -32,7 +32,10 @@ def getNextProbableWords(
 
     res = {}
     for statement in statements:
-        print(statement)
+        if statement == "":
+            res[statement] = [""]
+            continue
+
         endsWithStop = statement[-1] == "."
         params = statement.split(".")
         filt = ""
@@ -88,6 +91,7 @@ def getNextProbableWords(
             temp = combined[c]
 
         finalise(temp, filter)
+    print(res)
     return res
 
 
@@ -98,6 +102,4 @@ lazydev = Blueprint("lazydev", __name__)
 def getCommon():
     classes = request.json["classes"]
     query = request.json["statements"]
-    print(classes)
-    print(query)
     return jsonify(getNextProbableWords(classes=classes, statements=query))
