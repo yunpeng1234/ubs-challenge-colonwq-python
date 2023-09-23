@@ -10,10 +10,16 @@ def traverseNested(code, line, env):
         if codeLine.startswith("if "):
             # find the next line
             condtoeval = " ".join(codeLine.split(" ")[1:])
+            line += 1
             if not eval(condtoeval, {}, env):
-                while code[line] != "endif":
+                endifcount = 1
+                while endifcount != 0:
+                    if code[line].startswith("if "):
+                        endifcount += 1
+                    if code[line] == "endif":
+                        endifcount -= 1
                     line += 1
-            newLine, isFailed, newEnv = traverseNested(code, line + 1, env)
+            newLine, isFailed, newEnv = traverseNested(code, line, env)
             if not isFailed:
                 line = newLine
                 env = newEnv
