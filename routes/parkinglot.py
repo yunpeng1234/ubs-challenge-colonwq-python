@@ -83,11 +83,19 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed
                 bike -= bUsed * 2
                 car -= bUsed * 2
-                if bike <= 2 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
+                print("HERE")
+                if bike == 0 and car == 0:
+                    continue
+                if bike >= 0 and bS > 0 and car >= 0:
+                    print("HERE")
                     heapq.heappush(
                         slots,
-                        (-1 * (bike * biP + car * cP), "B,{},{}".format(car, bike)),
+                        (
+                            -1 * (bike * biP + car * cP),
+                            "B,{},{}".format(min(car, 2), min(bike, 2)),
+                        ),
                     )
+
             continue
         elif s == "2C":
             if bS > 0 and car > 0:
@@ -95,7 +103,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 profit += bUsed * v
                 bS -= bUsed
                 car -= bUsed * 2
-                if bS > 0 and car <= 2 and car >= 0:
+                if bS > 0 and car < 2 and car > 0:
                     heapq.heappush(
                         slots, (-1 * (bike * biP + car * cP), "B,{},0".format(car))
                     )
@@ -118,10 +126,15 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed
                 bike -= bUsed * 7
                 car -= bUsed
-                if bike <= 7 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
+                if bike == 0 and car == 0:
+                    continue
+                if bike >= 0 and bS > 0 and car >= 0:
                     heapq.heappush(
                         slots,
-                        (-1 * (bike * biP + car * cP), "B,{},{}".format(car, bike)),
+                        (
+                            -1 * (bike * biP + car * cP),
+                            "B,{},{}".format(min(car, 1), min(bike, 7)),
+                        ),
                     )
             continue
         else:
