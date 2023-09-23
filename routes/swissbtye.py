@@ -10,21 +10,18 @@ def traverseNested(code, line, env):
         if codeLine.startswith("if "):
             # find the next line
             condtoeval = " ".join(codeLine.split(" ")[1:])
-            if eval(condtoeval, env):
-                newLine, isFailed, newEnv = traverseNested(code, line + 1, env)
-            # Check condition and jump
-            else:
-                while not code[line].startswith("endif"):
+            if not eval(condtoeval, env):
+                while code[line] != "endif":
                     line += 1
 
-                newLine, isFailed, newEnv = traverseNested(code, line + 1, env)
+            newLine, isFailed, newEnv = traverseNested(code, line + 1, env)
             if not isFailed:
                 line = newLine
                 env = newEnv
             else:
                 return (line + 1, True, newEnv)
             continue
-        if codeLine.startswith("endif "):
+        if codeLine == "endif":
             return (line + 1, False, env)
         if codeLine == "fail":
             return (line + 1, True, env)
@@ -59,6 +56,6 @@ def getCommon():
         extracted = {}
         for v in variablesSet:
             extracted[v] = env[v]
-        res.append({"is_solvable": isFailed, "variables": extracted})
+        res.append({"is_solvable": not isFailed, "variables": extracted})
 
     return jsonify({"outcomes": res})
