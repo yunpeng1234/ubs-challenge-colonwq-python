@@ -6,12 +6,20 @@ parkinglot = Blueprint("parkinglot", __name__)
 
 
 def parsing(stro):
+    print(stro, "HELP")
     a, b, c = stro.split(",")
 
     return (a == "B", int(b), int(c))
 
 
 def calcParking(bS, cS, charges, bus, car, bike):
+    if bS == 0 and cS == 0:
+        return {
+            "Profit": 0,
+            "BusRejections": bus,
+            "CarRejections": car,
+            "BikeRejections": bike,
+        }
     res = {}
     profit = 0
     # Check Car slots first -> bus

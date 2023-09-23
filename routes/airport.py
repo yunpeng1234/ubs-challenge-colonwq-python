@@ -58,6 +58,35 @@ def swap(a, i, j):
     a[j] = temp
 
 
+def firstParition(a, low, high, i, j, cutOff):
+    # To handle 2 elements
+    if high - low <= 1:
+        if a[high].askTimeToDeparture() < a[low].askTimeToDeparture():
+            swap(a, high, low)
+        i = low
+        j = high
+        return (i, j)
+
+    mid = low
+    pivot = cutOff
+    while mid <= high:
+        toCheck = a[mid].askTimeToDeparture()
+        if toCheck < pivot:
+            swap(a, low, mid)
+            low += 1
+            mid += 1
+        elif toCheck == pivot:
+            mid += 1
+        elif toCheck > pivot:
+            swap(a, mid, high)
+            high -= 1
+
+    # update i and j
+    i = low - 1
+    j = mid  # or high+1
+    return (i, j)
+
+
 def partition(a, low, high, i, j):
     # To handle 2 elements
     if high - low <= 1:
@@ -96,33 +125,37 @@ def quickSort(a, low, high):
     j = high
 
     # Note that i and j are passed as reference
-    i, j = partition(a, low, high, i, j)
+    i, j = firstParition(a, low, high, i, j)
 
     # Recur two halves
     quickSort(a, low, i)
     quickSort(a, j, high)
 
 
+# 3-way partition based quick sort
+def fquickSort(a, low, high, cutOff):
+    if low >= high:  # 1 or 0 elements
+        return
+
+    i = low
+    j = high
+
+    # Note that i and j are passed as reference
+    i, j = firstParition(a, low, high, i, j, cutOff)
+
+    quickSort(a, j, high)
+
+
 def prioritisation_function(passengers, cut_off_time):
     okToUse = []
-    buckets = {}
     for p in passengers:
         temp = p.askTimeToDeparture()
         if temp >= cut_off_time:
-            if temp in buckets:
-                buckets[temp].append(p)
-            else:
-                buckets[temp] = [p]
-                okToUse.append(p)
+            okToUse.append(p)
     quickSort(okToUse, 0, len(okToUse) - 1)
-    res = []
-    for o in okToUse:
-        pa = buckets[o.askTimeToDeparture()]
-        for p in pa:
-            res.append(p)
     # your solution here
     # return sorted array of passenger instances
-    return res
+    return okToUse
 
 
 @airport.route("/airport", methods=["POST"])
