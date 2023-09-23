@@ -11,6 +11,39 @@ swissbyte = Blueprint("swissbyte", __name__)
 # print(traverseNested(code, 0, global_env))
 
 
+# return line,failed?, env
+def traverseNested(code, line, env):
+    while line < len(code):
+        codeLine = code[line]
+        if codeLine.startswith("if "):
+            # find the next line
+            condtoeval = " ".join(codeLine.split(" ")[1:])
+            line += 1
+            if not eval(condtoeval, env):
+                endifcount = 1
+                while endifcount != 0:
+                    if code[line].startswith("if "):
+                        endifcount += 1
+                    if code[line] == "endif":
+                        endifcount -= 1
+                    line += 1
+                continue
+            else:
+                newLine, isFailed = traverseNested(code, line, env)
+                if not isFailed:
+                    line = newLine
+                else:
+                    return (line + 1, True)
+        if codeLine == "endif":
+            return (line + 1, False)
+        if codeLine == "fail":
+            return (line + 1, True)
+        else:
+            exec(codeLine, env)
+            line += 1
+    return (line + 1, False)
+
+
 @swissbyte.route("/swissbyte", methods=["POST"])
 def getCommon():
     code = request.json["code"]
@@ -24,38 +57,7 @@ def getCommon():
             env[x] = y
             vtoCount.add(x)
 
-        # return line,failed?, env
-        def traverseNested(code, line):
-            while line < len(code):
-                codeLine = code[line]
-                if codeLine.startswith("if "):
-                    # find the next line
-                    condtoeval = " ".join(codeLine.split(" ")[1:])
-                    line += 1
-                    if not eval(condtoeval, env):
-                        endifcount = 1
-                        while endifcount != 0:
-                            if code[line].startswith("if "):
-                                endifcount += 1
-                            if code[line] == "endif":
-                                endifcount -= 1
-                            line += 1
-                    newLine, isFailed = traverseNested(code, line)
-                    if not isFailed:
-                        line = newLine
-                    else:
-                        return (line + 1, True)
-                    continue
-                if codeLine == "endif":
-                    return (line + 1, False)
-                if codeLine == "fail":
-                    return (line + 1, True)
-                else:
-                    exec(codeLine, env)
-                    line += 1
-            return (line + 1, False)
-
-        _, isFailed = traverseNested(code, 0)
+        _, isFailed = traverseNested(code, 0, env)
 
         extracted = {}
         for v in vtoCount:
