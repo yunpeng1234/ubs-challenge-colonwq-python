@@ -50,6 +50,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
     # Check optimal slot
     while len(slots) > 0:
         v, s = heapq.heappop(slots)
+        print(s)
         if s == "B":
             if bS > 0 and bus > 0:
                 bUsed = min(bS, bus)
@@ -66,23 +67,22 @@ def calcParking(bS, cS, charges, bus, car, bike):
             continue
         elif s == "5B":
             if bike > 0 and cS > 0:
-                maxU = cS // 5
-                bUsed = min(maxU * 5, bike // 5 * 5)
-                profit += bUsed // 5 * v
-                cS -= bUsed // 5
-                bike -= bUsed
+                maxU = bike // 5
+                bUsed = min(maxU, cS)
+                profit += bUsed * v
+                cS -= bUsed
+                bike -= bUsed * 5
                 # remainder
                 if bike < 5 and bike > 0 and cS > 0:
                     heapq.heappush(slots, (-1 * bike * biP, "C,0,{}".format(bike)))
             continue
         elif s == "2C2B":
             if bike > 0 and bS > 0 and car > 0:
-                maxU = bS // 2
-                bUsed = min(maxU * 2, bike // 2 * 2, car // 2 * 2)
-                profit += bUsed // 2 * v
-                bS -= bUsed // 2
-                bike -= bUsed
-                car -= bUsed
+                bUsed = min(bS, bike // 2, car // 2)
+                profit += bUsed * v
+                bS -= bUsed
+                bike -= bUsed * 2
+                car -= bUsed * 2
                 if bike <= 2 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
                     heapq.heappush(
                         slots,
@@ -91,11 +91,10 @@ def calcParking(bS, cS, charges, bus, car, bike):
             continue
         elif s == "2C":
             if bS > 0 and car > 0:
-                maxU = bS // 2
-                bUsed = min(maxU * 2, car // 2 * 2)
-                profit += bUsed // 2 * v
-                bS -= bUsed // 2
-                car -= bUsed
+                bUsed = min(bS, car // 2)
+                profit += bUsed * v
+                bS -= bUsed
+                car -= bUsed * 2
                 if bS > 0 and car <= 2 and car >= 0:
                     heapq.heappush(
                         slots, (-1 * (bike * biP + car * cP), "B,{},0".format(car))
@@ -103,11 +102,10 @@ def calcParking(bS, cS, charges, bus, car, bike):
             continue
         elif s == "12B":
             if bike > 0 and bS > 0:
-                maxU = bS // 12
-                bUsed = min(maxU * 12, bike // 12 * 12)
-                profit += bUsed // 12 * v
-                bS -= bUsed // 12
-                bike -= bUsed
+                bUsed = min(bS, bike // 12)
+                profit += bUsed * v
+                bS -= bUsed
+                bike -= bUsed * 12
                 # remainder
                 if bike < 12 and bike > 0 and bS > 0:
                     heapq.heappush(slots, (-1 * bike * biP, "B,0,{}".format(bike)))
@@ -115,7 +113,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
         elif s == "1C7B":
             if bike > 0 and bS > 0 and car > 0:
                 maxU = bS
-                bUsed = min(maxU, bike // 7 * 7, car)
+                bUsed = min(maxU, bike // 7, car)
                 profit += bUsed * v
                 bS -= bUsed
                 bike -= bUsed * 7
