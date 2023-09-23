@@ -1,5 +1,6 @@
 from flask import Flask
 from routes.challenge1.lazydev import lazydev
+from routes.challenge2.greedymonkey import greedymonkey
 
 import logging
 
@@ -13,7 +14,7 @@ def default_route():
 
 
 app.register_blueprint(lazydev)
-
+app.register_blueprint(greedymonkey)
 # logger = logging.getLogger()
 # handler = logging.StreamHandler()
 # formatter = logging.Formatter("%(asctime)s %(name)-12s %(levelname)-8s %(message)s")
