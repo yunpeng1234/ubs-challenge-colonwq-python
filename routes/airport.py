@@ -65,24 +65,26 @@ def partition(a, low, high, i, j):
             swap(a, high, low)
         i = low
         j = high
-        return
+        return (i, j)
 
     mid = low
     pivot = a[high].askTimeToDeparture()
     while mid <= high:
-        if a[mid].askTimeToDeparture() < pivot:
+        toCheck = a[mid].askTimeToDeparture()
+        if toCheck < pivot:
             swap(a, low, mid)
             low += 1
             mid += 1
-        elif a[mid].askTimeToDeparture() == pivot:
+        elif toCheck == pivot:
             mid += 1
-        elif a[mid].askTimeToDeparture() > pivot:
+        elif toCheck > pivot:
             swap(a, mid, high)
             high -= 1
 
     # update i and j
     i = low - 1
     j = mid  # or high+1
+    return (i, j)
 
 
 # 3-way partition based quick sort
@@ -94,7 +96,7 @@ def quickSort(a, low, high):
     j = high
 
     # Note that i and j are passed as reference
-    partition(a, low, high, i, j)
+    i, j = partition(a, low, high, i, j)
 
     # Recur two halves
     quickSort(a, low, i)
