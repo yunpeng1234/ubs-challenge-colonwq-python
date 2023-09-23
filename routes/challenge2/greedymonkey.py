@@ -32,6 +32,6 @@ def getFruit(max_weight, max_volume, fruit):
 def getCommon():
     w = request.json["w"]
     v = request.json["v"]
-    f = request.json["v"]
+    f = request.json["f"]
 
     return getFruit(w, v, f)
