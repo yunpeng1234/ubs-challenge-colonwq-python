@@ -34,9 +34,9 @@ def traverseNested(code, line, env):
                     line = newLine
                 else:
                     return (line + 1, True)
-        if codeLine == "endif":
+        elif codeLine == "endif":
             return (line + 1, False)
-        if codeLine == "fail":
+        elif codeLine == "fail":
             return (line + 1, True)
         else:
             exec(codeLine, env)
@@ -51,6 +51,7 @@ def getCommon():
     res = []
     print(code)
     for o in cases:
+        print(o)
         vtoCount = set()
         env = {}
         for x, y in o.items():
