@@ -125,7 +125,7 @@ def quickSort(a, low, high):
     j = high
 
     # Note that i and j are passed as reference
-    i, j = firstParition(a, low, high, i, j)
+    i, j = partition(a, low, high, i, j)
 
     # Recur two halves
     quickSort(a, low, i)
@@ -144,18 +144,19 @@ def fquickSort(a, low, high, cutOff):
     i, j = firstParition(a, low, high, i, j, cutOff)
 
     quickSort(a, j, high)
+    return i
 
 
 def prioritisation_function(passengers, cut_off_time):
-    okToUse = []
-    for p in passengers:
-        temp = p.askTimeToDeparture()
-        if temp >= cut_off_time:
-            okToUse.append(p)
-    quickSort(okToUse, 0, len(okToUse) - 1)
+    # okToUse = []
+    # for p in passengers:
+    #     temp = p.askTimeToDeparture()
+    #     if temp >= cut_off_time:
+    #         okToUse.append(p)
+    i = fquickSort(passengers, 0, len(passengers) - 1, cut_off_time)
     # your solution here
     # return sorted array of passenger instances
-    return okToUse
+    return passengers[i + 1 :]
 
 
 @airport.route("/airport", methods=["POST"])
