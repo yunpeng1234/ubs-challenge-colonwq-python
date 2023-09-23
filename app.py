@@ -4,6 +4,9 @@ from routes.challenge2.greedymonkey import greedymonkey
 from routes.challenge3.digitalcolony import digitalcolony
 from routes.airport import airport
 from routes.swissbtye import swissbyte
+from routes.maze import maze
+from routes.chinesewall import chinesewall
+
 import logging
 
 app = Flask(__name__)
@@ -20,6 +23,8 @@ app.register_blueprint(greedymonkey)
 app.register_blueprint(digitalcolony)
 app.register_blueprint(airport)
 app.register_blueprint(swissbyte)
+app.register_blueprint(maze)
+app.register_blueprint(chinesewall)
 
 # logger = logging.getLogger()
 # handler = logging.StreamHandler()
