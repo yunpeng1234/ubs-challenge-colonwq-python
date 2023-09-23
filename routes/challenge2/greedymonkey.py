@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, abort, request, jsonify
+from flask import Blueprint, render_template, session, jsonify, request, make_response
 
 
 greedymonkey = Blueprint("greedymonkey", __name__)
@@ -33,5 +33,6 @@ def getCommon():
     w = request.json["w"]
     v = request.json["v"]
     f = request.json["f"]
-
-    return getFruit(w, v, f)
+    # r = make_response(getFruit(w, v, f), 200)
+    # r.mimetype = "text/plain"
+    return jsonify(getFruit(w, v, f))
