@@ -52,10 +52,10 @@ def execute(prioritisation_function, passenger_data, cut_off_time, test_id):
     }
 
 
-# def swap(a, i, j):
-#     temp = a[i]
-#     a[i] = a[j]
-#     a[j] = temp
+def swap(a, i, j):
+    temp = a[i]
+    a[i] = a[j]
+    a[j] = temp
 
 
 # def firstParition(a, low, high, i, j, cutOff):
@@ -87,49 +87,49 @@ def execute(prioritisation_function, passenger_data, cut_off_time, test_id):
 #     return (i, j)
 
 
-# def partition(a, low, high, i, j):
-#     # To handle 2 elements
-#     if high - low <= 1:
-#         if a[high].askTimeToDeparture() < a[low].askTimeToDeparture():
-#             swap(a, high, low)
-#         i = low
-#         j = high
-#         return (i, j)
+def partition(a, low, high, i, j):
+    # To handle 2 elements
+    if high - low <= 1:
+        if a[high].askTimeToDeparture() < a[low].askTimeToDeparture():
+            swap(a, high, low)
+        i = low
+        j = high
+        return (i, j)
 
-#     mid = low
-#     pivot = a[high].askTimeToDeparture()
-#     while mid <= high:
-#         toCheck = a[mid].askTimeToDeparture()
-#         if toCheck < pivot:
-#             swap(a, low, mid)
-#             low += 1
-#             mid += 1
-#         elif toCheck == pivot:
-#             mid += 1
-#         elif toCheck > pivot:
-#             swap(a, mid, high)
-#             high -= 1
+    mid = low
+    pivot = a[high].askTimeToDeparture()
+    while mid <= high:
+        toCheck = a[mid].askTimeToDeparture()
+        if toCheck < pivot:
+            swap(a, low, mid)
+            low += 1
+            mid += 1
+        elif toCheck == pivot:
+            mid += 1
+        elif toCheck > pivot:
+            swap(a, mid, high)
+            high -= 1
 
-#     # update i and j
-#     i = low - 1
-#     j = mid  # or high+1
-#     return (i, j)
+    # update i and j
+    i = low - 1
+    j = mid  # or high+1
+    return (i, j)
 
 
-# # 3-way partition based quick sort
-# def quickSort(a, low, high):
-#     if low >= high:  # 1 or 0 elements
-#         return
+# 3-way partition based quick sort
+def quickSort(a, low, high):
+    if low >= high:  # 1 or 0 elements
+        return
 
-#     i = low
-#     j = high
+    i = low
+    j = high
 
-#     # Note that i and j are passed as reference
-#     i, j = partition(a, low, high, i, j)
+    # Note that i and j are passed as reference
+    i, j = partition(a, low, high, i, j)
 
-#     # Recur two halves
-#     quickSort(a, low, i)
-#     quickSort(a, j, high)
+    # Recur two halves
+    quickSort(a, low, i)
+    quickSort(a, j, high)
 
 
 # # 3-way partition based quick sort
@@ -147,55 +147,55 @@ def execute(prioritisation_function, passenger_data, cut_off_time, test_id):
 #     return i
 
 
-def dualPivotQuickSort(arr, low, high):
-    if low < high:
-        # lp means left pivot and rp
-        # means right pivot
-        lp, rp = partition(arr, low, high)
+# def dualPivotQuickSort(arr, low, high):
+#     if low < high:
+#         # lp means left pivot and rp
+#         # means right pivot
+#         lp, rp = partition(arr, low, high)
 
-        dualPivotQuickSort(arr, low, lp - 1)
-        dualPivotQuickSort(arr, lp + 1, rp - 1)
-        dualPivotQuickSort(arr, rp + 1, high)
+#         dualPivotQuickSort(arr, low, lp - 1)
+#         dualPivotQuickSort(arr, lp + 1, rp - 1)
+#         dualPivotQuickSort(arr, rp + 1, high)
 
 
-def partition(arr, low, high):
-    if arr[low] > arr[high]:
-        arr[low], arr[high] = arr[high], arr[low]
+# def partition(arr, low, high):
+#     if arr[low].askTimeToDeparture() > arr[high].askTimeToDeparture():
+#         arr[low], arr[high] = arr[high], arr[low]
 
-    # p is the left pivot, and q is the right pivot.
-    j = k = low + 1
-    g, p, q = high - 1, arr[low], arr[high]
+#     # p is the left pivot, and q is the right pivot.
+#     j = k = low + 1
+#     g, p, q = high - 1, arr[low].askTimeToDeparture(), arr[high].askTimeToDeparture()
 
-    while k <= g:
-        # If elements are less than the left pivot
-        if arr[k] < p:
-            arr[k], arr[j] = arr[j], arr[k]
-            j += 1
+#     while k <= g:
+#         # If elements are less than the left pivot
+#         if arr[k].askTimeToDeparture() < p:
+#             arr[k], arr[j] = arr[j], arr[k]
+#             j += 1
 
-        # If elements are greater than or equal
-        # to the right pivot
-        elif arr[k] >= q:
-            while arr[g] > q and k < g:
-                g -= 1
+#         # If elements are greater than or equal
+#         # to the right pivot
+#         elif arr[k].askTimeToDeparture() >= q:
+#             while arr[g].askTimeToDeparture() > q and k < g:
+#                 g -= 1
 
-            arr[k], arr[g] = arr[g], arr[k]
-            g -= 1
+#             arr[k], arr[g] = arr[g], arr[k]
+#             g -= 1
 
-            if arr[k] < p:
-                arr[k], arr[j] = arr[j], arr[k]
-                j += 1
+#             if arr[k].askTimeToDeparture() < p:
+#                 arr[k], arr[j] = arr[j], arr[k]
+#                 j += 1
 
-        k += 1
+#         k += 1
 
-    j -= 1
-    g += 1
+#     j -= 1
+#     g += 1
 
-    # Bring pivots to their appropriate positions.
-    arr[low], arr[j] = arr[j], arr[low]
-    arr[high], arr[g] = arr[g], arr[high]
+#     # Bring pivots to their appropriate positions.
+#     arr[low], arr[j] = arr[j], arr[low]
+#     arr[high], arr[g] = arr[g], arr[high]
 
-    # Returning the indices of the pivots
-    return j, g
+#     # Returning the indices of the pivots
+#     return j, g
 
 
 def prioritisation_function(passengers, cut_off_time):
@@ -204,7 +204,7 @@ def prioritisation_function(passengers, cut_off_time):
         temp = p.askTimeToDeparture()
         if temp >= cut_off_time:
             okToUse.append(p)
-    dualPivotQuickSort(passengers, 0, len(passengers) - 1)
+    quickSort(okToUse, 0, len(okToUse) - 1)
     # your solution here
     # return sorted array of passenger instances
     return okToUse
