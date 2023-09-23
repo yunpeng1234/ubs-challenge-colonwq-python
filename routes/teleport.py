@@ -12,7 +12,7 @@ def minimum_distance_teleportation(k, p, q):
     total_distance = 0.0
     remaining_items = q.copy()
 
-    while remaining_items:
+    while len(remaining_items) > 0:
         if k > 0:
             # Use a teleportation orb if available
             closest_hub = p.pop(0)

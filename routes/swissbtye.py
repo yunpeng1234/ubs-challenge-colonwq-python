@@ -48,9 +48,9 @@ def getCommon():
     code = request.json["code"]
     cases = request.json["cases"]
     res = []
-    for i in range(len(code)):
-        code[i] == code[i].replace(" / ", " // ")
 
+    for i in range(len(code)):
+        code[i] = code[i].replace(" / ", " // ")
     for o in cases:
         vtoCount = set()
         env = {}
@@ -62,7 +62,7 @@ def getCommon():
 
         extracted = {}
         for v in vtoCount:
-            extracted[v] = int(env[v])
+            extracted[v] = env[v]
 
         res.append({"is_solvable": not isFailed, "variables": extracted})
 
