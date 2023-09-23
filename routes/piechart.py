@@ -17,10 +17,32 @@ def calculateRadians(total, qtys, maxRadians):
     qtys.sort(reverse=True)
     res = [0.0]
     for qty in qtys:
+        print(qty / total)
+        print(maxRadians * qty / total)
+
         res.append((qty / total) * maxRadians)
     counting(res)
+    print(res)
     newR = list(map(lambda x: round(x, 8), res))
     return {"instruments": newR}
+
+
+# Write from the back smallest to largest
+def calculateRadians2(total, qtys, maxRadians, starting):
+    qtys.sort()
+    res = [2 * pi]
+    print(qtys, total)
+    for qty in qtys:
+        print(qty / total)
+        if qty / total < 0.0005:
+            print("HERE")
+            res.append(res[-1] - 0.00314159)
+            maxRadians -= 0.00314159
+            total -= qty
+        else:
+            res.append(res[-1] - ((qty / total) * maxRadians))
+    newR = list(map(lambda x: round(x, 8), res))
+    return {"instruments": newR[::-1]}
 
 
 def checkMinimum(total, min, checkAgainst):
@@ -121,7 +143,7 @@ def getCommon():
             sector[c] = val
 
     if isFirst:
-        return jsonify(calculateRadians(total, counts, 2 * pi))
+        return jsonify(calculateRadians2(total, counts, 2 * pi, 2 * pi))
     else:
         return jsonify(
             calcSplitChort(total, counts, currency, assetClass, region, sector)
