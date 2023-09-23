@@ -4,32 +4,100 @@ from math import pi
 piechart = Blueprint("piechart", __name__)
 
 
+def counting(res):
+    prev = res[0]
+    for i in range(1, len(res)):
+        temp = prev
+        res[i] += temp
+        prev = res[i]
+    return res
+
+
 def calculateRadians(total, qtys, maxRadians):
     qtys.sort(reverse=True)
     res = [0.0]
     for qty in qtys:
         res.append((qty / total) * maxRadians)
-    return {"intruments": qty}
+    counting(res)
+    newR = list(map(lambda x: round(x, 8), res))
+    return {"instruments": newR}
 
 
-def calcSplitChort():
-    pass
+def checkMinimum(total, min, checkAgainst):
+    if (min / total) <= 1 / 1000:
+        newArcSize = (1 / 1000 * pi) / min * total
+        return (False, newArcSize)
+    return (True, 0)
 
 
-@piechart.route("/piechart", methods=["GET"])
+def calcSplitChort(total, qty, cm, am, rm, sm):
+    res = {}
+    # Calc instruments
+    rhsArcSize = (2 / 3 - 3 / 1000) * pi / 4
+
+    tempR = calculateRadians(total, qty, maxRadians=pi * 2 / 3)["instruments"][::-1]
+    qty = list(map(lambda x: x + (pi * (7 / 6)), tempR))
+    res["instruments"] = qty
+
+    # Get the smallest for each given arc
+    cMin = min(cm.values())
+    aMin = min(cm.values())
+    rMin = min(rm.values())
+    sMin = min(sm.values())
+
+    tempH = {}
+    tempH["c"] = cMin
+    tempH["a"] = aMin
+    tempH["r"] = rMin
+    tempH["s"] = sMin
+    totalArcSize = (2 / 3 - 3 / 1000) * pi
+    count = 4
+    arcSize = {}
+    for k, v in sorted(tempH.items(), key=lambda item: item[1]):
+        ok, newArc = checkMinimum(total, v, totalArcSize / count)
+        print(newArc)
+        if not ok:
+            totalArcSize -= newArc
+            arcSize[k] = newArc
+            count -= 1
+        else:
+            arcSize[k] = totalArcSize / count
+    order = ["c", "s", "a", "r"]
+    tag = ["currency", "sector", "assetClass", "region"]
+    va = [cm, sm, am, rm]
+    currHeader = 1 / 6 * pi
+    for i in range(4):
+        arcS = arcSize[order[i]]
+        nums = list(va[i].values())
+        temp = calculateRadians(total, nums, arcS)["instruments"]
+        tmp = list(
+            map(
+                lambda x: round(x, 8),
+                map(
+                    lambda x: x + currHeader,
+                    temp,
+                ),
+            )
+        )
+        res[tag[i]] = tmp
+        currHeader += arcS + (1 / 1000 * pi)
+    return res
+
+
+@piechart.route("/pie-chart", methods=["POST"])
 def getCommon():
     items = request.json["data"]
     isFirst = request.json["part"] == "FIRST"
-    itemMap = {}
     total = 0
     counts = []
+
     currency = {}
     assetClass = {}
     region = {}
     sector = {}
 
     for i in items:
-        c, a, r, s = i["currency"], i["assectClass"], i["region"], i["sector"]
+        c, a, r, s = i["currency"], i["assetClass"], i["region"], i["sector"]
         val = i["quantity"] * i["price"]
         counts.append(val)
         total += val
@@ -42,7 +110,6 @@ def getCommon():
             assetClass[a] += val
         else:
             assetClass[a] = val
-
         if r in region:
             region[r] += val
         else:
@@ -56,4 +123,6 @@ def getCommon():
     if isFirst:
         return jsonify(calculateRadians(total, counts, 2 * pi))
     else:
-        return jsonify(calcSplitChort())
+        return jsonify(
+            calcSplitChort(total, counts, currency, assetClass, region, sector)
+        )

@@ -105,13 +105,24 @@ def quickSort(a, low, high):
 
 def prioritisation_function(passengers, cut_off_time):
     okToUse = []
+    buckets = {}
     for p in passengers:
-        if p.askTimeToDeparture() >= cut_off_time:
-            okToUse.append(p)
+        temp = p.askTimeToDeparture()
+        if temp >= cut_off_time:
+            if temp in buckets:
+                buckets[temp].append(p)
+            else:
+                buckets[temp] = [p]
+                okToUse.append(p)
     quickSort(okToUse, 0, len(okToUse) - 1)
+    res = []
+    for o in okToUse:
+        pa = buckets[o.askTimeToDeparture()]
+        for p in pa:
+            res.append(p)
     # your solution here
     # return sorted array of passenger instances
-    return okToUse
+    return res
 
 
 @airport.route("/airport", methods=["POST"])
