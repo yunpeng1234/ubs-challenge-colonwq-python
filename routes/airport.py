@@ -52,92 +52,53 @@ def execute(prioritisation_function, passenger_data, cut_off_time, test_id):
     }
 
 
-# def mergeSort(arr):
-#     if len(arr) > 1:
-#         # Finding the mid of the array
-#         mid = len(arr) // 2
-#         # Dividing the array elements
-#         L = arr[:mid]
-
-#         # Into 2 halves
-#         R = arr[mid:]
-
-#         # Sorting the first half
-#         mergeSort(L)
-
-#         # Sorting the second half
-#         mergeSort(R)
-
-#         i = j = k = 0
-
-#         while i < len(L) and j < len(R):
-#             if L[i].askTimeToDeparture() <= R[j].askTimeToDeparture():
-#                 arr[k] = L[i]
-#                 i += 1
-#             else:
-#                 arr[k] = R[j]
-#                 j += 1
-#             k += 1
-
-#         # Checking if any element was left
-#         while i < len(L):
-#             arr[k] = L[i]
-#             i += 1
-#             k += 1
+def swap(a, i, j):
+    temp = a[i]
+    a[i] = a[j]
+    a[j] = temp
 
 
-#         while j < len(R):
-#             arr[k] = R[j]
-#             j += 1
-#             k += 1
-def partition(arr, first, last, start, mid):
-    pivot = arr[last].askTimeToDeparture()
-    end = last
-
-    # Iterate while mid is not greater than end.
-    while mid[0] <= end:
-        # Inter Change position of element at the starting if it's value is less than pivot.
-        if arr[mid[0]].askTimeToDeparture() < pivot:
-            arr[mid[0]], arr[start[0]] = arr[start[0]], arr[mid[0]]
-
-            mid[0] = mid[0] + 1
-            start[0] = start[0] + 1
-
-        # Inter Change position of element at the end if it's value is greater than pivot.
-        elif arr[mid[0]].askTimeToDeparture() > pivot:
-            arr[mid[0]], arr[end] = arr[end], arr[mid[0]]
-
-            end = end - 1
-
-        else:
-            mid[0] = mid[0] + 1
-
-
-# Function to sort the array elements in 3 cases
-def quicksort(arr, first, last):
-    # First case when an array contain only 1 element
-    if first >= last:
+def partition(a, low, high, i, j):
+    # To handle 2 elements
+    if high - low <= 1:
+        if a[high].askTimeToDeparture() < a[low].askTimeToDeparture():
+            swap(a, high, low)
+        i = low
+        j = high
         return
 
-    # Second case when an array contain only 2 elements
-    if last == first + 1:
-        if arr[first].askTimeToDeparture() > arr[last].askTimeToDeparture():
-            arr[first], arr[last] = arr[last], arr[first]
+    mid = low
+    pivot = a[high].askTimeToDeparture()
+    while mid <= high:
+        if a[mid].askTimeToDeparture() < pivot:
+            swap(a, low, mid)
+            low += 1
+            mid += 1
+        elif a[mid].askTimeToDeparture() == pivot:
+            mid += 1
+        elif a[mid].askTimeToDeparture() > pivot:
+            swap(a, mid, high)
+            high -= 1
 
-            return
+    # update i and j
+    i = low - 1
+    j = mid  # or high+1
 
-    # Third case when an array contain more than 2 elements
-    start = [first]
-    mid = [first]
 
-    # Function to partition the array.
-    partition(arr, first, last, start, mid)
+# 3-way partition based quick sort
+def quickSort(a, low, high):
+    if low >= high:  # 1 or 0 elements
+        return
 
-    # Recursively sort sublist containing elements that are less than the pivot.
-    quicksort(arr, first, start[0] - 1)
+    i = low
+    j = high
 
-    # Recursively sort sublist containing elements that are more than the pivot
-    quicksort(arr, mid[0], last)
+    # Note that i and j are passed as reference
+    partition(a, low, high, i, j)
+
+    # Recur two halves
+    quickSort(a, low, i)
+    quickSort(a, j, high)
 
 
 def prioritisation_function(passengers, cut_off_time):
@@ -145,7 +106,7 @@ def prioritisation_function(passengers, cut_off_time):
     for p in passengers:
         if p.askTimeToDeparture() >= cut_off_time:
             okToUse.append(p)
-    quicksort(okToUse, 0, len(okToUse) - 1)
+    quickSort(okToUse, 0, len(okToUse) - 1)
     # your solution here
     # return sorted array of passenger instances
     return okToUse
