@@ -59,7 +59,7 @@ def getCommon():
 
         extracted = {}
         for v in vtoCount:
-            extracted[v] = env[v]
+            extracted[v] = int(env[v])
 
         res.append({"is_solvable": not isFailed, "variables": extracted})
 

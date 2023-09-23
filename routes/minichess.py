@@ -529,7 +529,7 @@ def ab(gameboard):
     state = State(gameboard)
     alpha = -float("inf")
     beta = float("inf")
-    move, next_state = maxValue(state, alpha, beta, 4)
+    move, next_state = maxValue(state, alpha, beta, 5)
     return move
 
 
@@ -718,7 +718,6 @@ def parse(testcase):
 def getCommon():
     w = request.json["board"]
     gameboard = parse(w)
-    print(gameboard)
     a, b = ab(gameboard)
     c, d = decode(a)
     e, f = decode(b)
