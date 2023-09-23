@@ -94,7 +94,7 @@ def mergeSort(arr):
 def prioritisation_function(passengers, cut_off_time):
     okToUse = []
     for p in passengers:
-        if p.askTimeToDeparture() <= cut_off_time:
+        if p.askTimeToDeparture() > cut_off_time:
             okToUse.append(p)
     mergeSort(okToUse)
     # your solution here
