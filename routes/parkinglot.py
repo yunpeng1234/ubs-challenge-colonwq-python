@@ -11,6 +11,18 @@ def parsing(stro):
     return (a == "B", int(b), int(c))
 
 
+def pushOptimal(car, bike, cc, bc):
+    # try 2, 2
+    a, b = min(car, 2), min(bike, 2)
+    vA = a * cc + b * bc
+    # try 1, 7
+    c, d = min(car, 1), min(bike, 7)
+    vB = c * cc + d * bc
+    if vA >= vB:
+        return (-1 * vA, "B,{},{}".format(min(car, 1), min(bike, 7)))
+    return (-1 * vB, "B,{},{}".format(min(car, 2), min(bike, 2)))
+
+
 def calcParking(bS, cS, charges, bus, car, bike):
     if bS == 0 and cS == 0:
         return {
@@ -87,10 +99,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 if bike >= 0 and bS > 0 and car >= 0:
                     heapq.heappush(
                         slots,
-                        (
-                            -1 * (min(bike, 2) * biP + min(car, 2) * cP),
-                            "B,{},{}".format(min(car, 2), min(bike, 2)),
-                        ),
+                        pushOptimal(car, bike, cP, biP),
                     )
 
             continue
@@ -130,10 +139,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 if bike >= 0 and bS > 0 and car >= 0:
                     heapq.heappush(
                         slots,
-                        (
-                            -1 * (min(bike, 7) * biP + min(car, 1) * cP),
-                            "B,{},{}".format(min(car, 1), min(bike, 7)),
-                        ),
+                        pushOptimal(car, bike, cP, biP),
                     )
             continue
         else:
@@ -150,7 +156,6 @@ def calcParking(bS, cS, charges, bus, car, bike):
                         minB = min(car, c)
                         minC = min(bike, b)
                         if bS > 0:
-                            print(bike, car)
                             heapq.heappush(
                                 slots,
                                 (
