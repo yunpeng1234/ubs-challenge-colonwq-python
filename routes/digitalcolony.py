@@ -20,28 +20,37 @@ def getGeneration(generation, colony):
         [8, 7, 6, 5, 4, 3, 2, 1, 0, 9],
         [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
     ]
+    # Will be a key of (x,y) : count
+    currGen = {}
+    for i in range(len(currentGeneration) - 1):
+        x = currentGeneration[i]
+        y = currentGeneration[i + 1]
+        if (x, y) in currGen:
+            currGen[(x, y)] += 1
+        else:
+            currGen[(x, y)] = 1
     for i in range(generation):
-        tempGeneration = []
+        tempGeneration = {}
         newWeight = ans
-        for j in range(len(currentGeneration) - 1):
-            curr = currentGeneration[j]
-            nxt = currentGeneration[j + 1]
-            tempGeneration.append(currentGeneration[j])
+        for x, y in currGen.keys():
+            counter = currGen[(x, y)]
+            new = (ans % 10 + sig[x][y]) % 10
 
-            new = (ans % 10 + sig[curr][nxt]) % 10
+            if (x, new) in tempGeneration:
+                tempGeneration[(x, new)] += counter
+            else:
+                tempGeneration[(x, new)] = counter
 
-            tempGeneration.append(new)
+            if (new, y) in tempGeneration:
+                tempGeneration[(new, y)] += counter
+            else:
+                tempGeneration[(new, y)] = counter
+            # tempGeneration.append(new)
 
-            newWeight += new
-
-        tempGeneration.append(currentGeneration[-1])
-        currentGeneration = tempGeneration
+            newWeight += new * counter
+        currGen = tempGeneration
         ans = newWeight
-        print(i)
-    return ans
-
-
-print(getGeneration(50, "1000"))
+    return str(ans)
 
 
 @digitalcolony.route("/digital-colony", methods=["POST"])
@@ -50,6 +59,4 @@ def getCommon():
     arrayReq = []
     for o in w:
         arrayReq.append(getGeneration(int(o["generations"]), o["colony"]))
-    # r = make_response(getFruit(w, v, f), 200)
-    # r.mimetype = "text/plain"
     return jsonify(arrayReq)
