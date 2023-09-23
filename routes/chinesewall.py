@@ -11,6 +11,6 @@ def getCommon():
             "2": "Galactic",
             "3": "Mangoes",
             "4": "Subatomic",
-            "5": "Throne",
+            "5": "Jellyfish",
         }
     )
