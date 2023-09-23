@@ -180,7 +180,12 @@ def getCommon():
     return jsonify(
         {
             "Answer": calcParking(
-                busS, carS, charge, max(bus, 0), max(car, 0), max(bike, 0)
+                max(busS, 0),
+                max(carS, 0),
+                charge,
+                max(bus, 0),
+                max(car, 0),
+                max(bike, 0),
             )
         }
     )
