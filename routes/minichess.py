@@ -722,4 +722,4 @@ def getCommon():
     a, b = ab(gameboard)
     c, d = decode(a)
     e, f = decode(b)
-    return jsonify([c, d, e, f])
+    return jsonify({"move": [c, d, e, f]})
