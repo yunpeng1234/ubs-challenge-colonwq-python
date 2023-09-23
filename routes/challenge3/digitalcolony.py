@@ -56,6 +56,7 @@ def getGeneration(generation, colony):
 @digitalcolony.route("/digital-colony", methods=["POST"])
 def getCommon():
     w = request.json
+    print(w)
     arrayReq = []
     for o in w:
         arrayReq.append(getGeneration(int(o["generations"]), o["colony"]))
