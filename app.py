@@ -9,7 +9,7 @@ from routes.chinesewall import chinesewall
 from routes.piechart import piechart
 from routes.parkinglot import parkinglot
 from routes.minichess import minichess
-
+from routes.teleport import teleport
 import logging
 
 app = Flask(__name__)
@@ -31,6 +31,7 @@ app.register_blueprint(chinesewall)
 app.register_blueprint(piechart)
 app.register_blueprint(parkinglot)
 app.register_blueprint(minichess)
+app.register_blueprint(teleport)
 
 # logger = logging.getLogger()
 # handler = logging.StreamHandler()
