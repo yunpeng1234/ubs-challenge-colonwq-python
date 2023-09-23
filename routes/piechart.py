@@ -31,14 +31,18 @@ def calculateRadians(total, qtys, maxRadians):
 def calculateRadians2(total, qtys, maxRadians):
     qtys.sort()
     res = [2 * pi]
+    counter = 0
     for qty in qtys:
         if qty / total < 0.0005:
+            counter += 1
             res.append(res[-1] - 0.00314159)
             maxRadians -= 0.00314159
             total -= qty
         else:
             res.append(res[-1] - ((qty / total) * maxRadians))
+    print(counter, len(qtys))
     newR = list(map(lambda x: round(x, 8), res))
+    newR[-1] = 0.0
     return {"instruments": newR[::-1]}
 
 
@@ -140,7 +144,6 @@ def getCommon():
             sector[c] = val
 
     if isFirst:
-        print(sorted(counts), total)
         return jsonify(calculateRadians2(total, counts, 2 * pi))
     else:
         return jsonify({})
