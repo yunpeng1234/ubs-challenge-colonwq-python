@@ -15,7 +15,7 @@ def minimum_distance_teleportation(k, p, q):
     while len(remaining_items) > 0:
         if k > 0:
             # Use a teleportation orb if available
-            closest_hub = p.pop(0)
+            closest_hub = p[0]
             k -= 1
         else:
             # Walk to the nearest teleportation hub
