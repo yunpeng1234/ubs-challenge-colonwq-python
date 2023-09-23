@@ -28,14 +28,11 @@ def calculateRadians(total, qtys, maxRadians):
 
 
 # Write from the back smallest to largest
-def calculateRadians2(total, qtys, maxRadians, starting):
+def calculateRadians2(total, qtys, maxRadians):
     qtys.sort()
     res = [2 * pi]
-    print(qtys, total)
     for qty in qtys:
-        print(qty / total)
         if qty / total < 0.0005:
-            print("HERE")
             res.append(res[-1] - 0.00314159)
             maxRadians -= 0.00314159
             total -= qty
@@ -143,7 +140,8 @@ def getCommon():
             sector[c] = val
 
     if isFirst:
-        return jsonify(calculateRadians2(total, counts, 2 * pi, 2 * pi))
+        print(sorted(counts), total)
+        return jsonify(calculateRadians2(total, counts, 2 * pi))
     else:
         return jsonify(
             calcSplitChort(total, counts, currency, assetClass, region, sector)
