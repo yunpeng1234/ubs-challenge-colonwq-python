@@ -52,87 +52,43 @@ def execute(prioritisation_function, passenger_data, cut_off_time, test_id):
     }
 
 
-# def mergeSort(arr):
-#     if len(arr) > 1:
-#         # Finding the mid of the array
-#         mid = len(arr) // 2
-#         # Dividing the array elements
-#         L = arr[:mid]
+def mergeSort(arr):
+    if len(arr) > 1:
+        # Finding the mid of the array
+        mid = len(arr) // 2
+        # Dividing the array elements
+        L = arr[:mid]
 
-#         # Into 2 halves
-#         R = arr[mid:]
+        # Into 2 halves
+        R = arr[mid:]
 
-#         # Sorting the first half
-#         mergeSort(L)
+        # Sorting the first half
+        mergeSort(L)
 
-#         # Sorting the second half
-#         mergeSort(R)
+        # Sorting the second half
+        mergeSort(R)
 
-#         i = j = k = 0
+        i = j = k = 0
 
-#         while i < len(L) and j < len(R):
-#             if L[i].askTimeToDeparture() <= R[j].askTimeToDeparture():
-#                 arr[k] = L[i]
-#                 i += 1
-#             else:
-#                 arr[k] = R[j]
-#                 j += 1
-#             k += 1
+        while i < len(L) and j < len(R):
+            if L[i].askTimeToDeparture() <= R[j].askTimeToDeparture():
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
 
-#         # Checking if any element was left
-#         while i < len(L):
-#             arr[k] = L[i]
-#             i += 1
-#             k += 1
+        # Checking if any element was left
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
 
-#         while j < len(R):
-#             arr[k] = R[j]
-#             j += 1
-#             k += 1
-
-
-def merge(arr, start, mid, end):
-    start2 = mid + 1
-
-    # If the direct merge is already sorted
-    if arr[mid].askTimeToDeparture() <= arr[start2].askTimeToDeparture():
-        return
-
-    # Two pointers to maintain start
-    # of both arrays to merge
-    while start <= mid and start2 <= end:
-        # If element 1 is in right place
-        if arr[start].askTimeToDeparture() <= arr[start2].askTimeToDeparture():
-            start += 1
-        else:
-            value = arr[start2]
-            index = start2
-
-            # Shift all the elements between element 1
-            # element 2, right by 1.
-            while index != start:
-                arr[index] = arr[index - 1]
-                index -= 1
-
-            arr[start] = value
-
-            # Update all the pointers
-            start += 1
-            mid += 1
-            start2 += 1
-
-
-def mergeSort(arr, l, r):
-    if l < r:
-        # Same as (l + r) / 2, but avoids overflow
-        # for large l and r
-        m = l + (r - l) // 2
-
-        # Sort first and second halves
-        mergeSort(arr, l, m)
-        mergeSort(arr, m + 1, r)
-
-        merge(arr, l, m, r)
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
 
 
 def prioritisation_function(passengers, cut_off_time):
@@ -140,7 +96,7 @@ def prioritisation_function(passengers, cut_off_time):
     for p in passengers:
         if p.askTimeToDeparture() >= cut_off_time:
             okToUse.append(p)
-    mergeSort(okToUse)
+    okToUse.sort(key=lambda x: x.askTimeToDeparture())
     # your solution here
     # return sorted array of passenger instances
     return okToUse
