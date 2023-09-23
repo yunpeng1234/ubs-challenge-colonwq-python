@@ -8,6 +8,7 @@ from routes.maze import maze
 from routes.chinesewall import chinesewall
 from routes.piechart import piechart
 from routes.parkinglot import parkinglot
+from routes.minichess import minichess
 
 import logging
 
@@ -29,6 +30,7 @@ app.register_blueprint(maze)
 app.register_blueprint(chinesewall)
 app.register_blueprint(piechart)
 app.register_blueprint(parkinglot)
+app.register_blueprint(minichess)
 
 # logger = logging.getLogger()
 # handler = logging.StreamHandler()
