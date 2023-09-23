@@ -14,13 +14,16 @@ def counting(res):
 
 
 def calculateRadians(total, qtys, maxRadians):
-    qtys.sort(reverse=True)
+    qtys.sort()
     res = [0.0]
     for qty in qtys:
-        print(qty / total)
-        print(maxRadians * qty / total)
-
-        res.append((qty / total) * maxRadians)
+        if qty / total < 0.0005:
+            counter += 1
+            res.append(res[-1] - 0.00314159)
+            maxRadians -= 0.00314159
+            total -= qty
+        else:
+            res.append(res[-1] - ((qty / total) * maxRadians))
     counting(res)
     print(res)
     newR = list(map(lambda x: round(x, 8), res))
@@ -53,12 +56,12 @@ def checkMinimum(total, min, checkAgainst):
     return (True, 0)
 
 
-def calcSplitChort(total, qty, cm, am, rm, sm):
+def calcSplitChord(total, qty, cm, am, rm, sm):
     res = {}
     # Calc instruments
     rhsArcSize = (2 / 3 - 3 / 1000) * pi / 4
 
-    tempR = calculateRadians(total, qty, maxRadians=pi * 2 / 3)["instruments"][::-1]
+    res = calculateRadians(total, qty, maxRadians=pi * 2 / 3)["instruments"][::-1]
     qty = list(map(lambda x: x + (pi * (7 / 6)), tempR))
     res["instruments"] = qty
 
@@ -139,9 +142,9 @@ def getCommon():
             region[r] = val
 
         if s in sector:
-            sector[c] += val
+            sector[s] += val
         else:
-            sector[c] = val
+            sector[s] = val
 
     if isFirst:
         return jsonify(calculateRadians2(total, counts, 2 * pi))
