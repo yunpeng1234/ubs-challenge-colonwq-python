@@ -5,6 +5,12 @@ import heapq
 parkinglot = Blueprint("parkinglot", __name__)
 
 
+def parsing(stro):
+    a, b, c = stro.split(",")
+
+    return (a == "B", int(b), int(c))
+
+
 def calcParking(bS, cS, charges, bus, car, bike):
     res = {}
     profit = 0
@@ -56,8 +62,8 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 cS -= bUsed // 5
                 bike -= bUsed
                 # remainder
-                # if bike < 5 and bike > 0 and cS > 0:
-                #     heapq.heappush(slots, (-1 * bike * biP, "CAR"))
+                if bike < 5 and bike > 0 and cS > 0:
+                    heapq.heappush(slots, (-1 * bike * biP, "C,0,{}".format(bike)))
         if s == "2C2B":
             if bike > 0 and bS > 0 and car > 0:
                 maxU = bS // 2
@@ -66,8 +72,11 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed // 2
                 bike -= bUsed
                 car -= bUsed
-                # if bike <= 2 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
-                #     heapq.heappush(slots, (-1 * (bike * biP + car * cP), "BUS"))
+                if bike <= 2 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
+                    heapq.heappush(
+                        slots,
+                        (-1 * (bike * biP + car * cP), "B,{},{}".format(car, bike)),
+                    )
         if s == "2C":
             if bS > 0 and car > 0:
                 maxU = bS // 2
@@ -75,8 +84,10 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 profit += bUsed // 2 * v
                 bS -= bUsed // 2
                 car -= bUsed
-                # if bS > 0 and car <= 2 and car >= 0:
-                #     heapq.heappush(slots, (-1 * (bike * biP + car * cP), "BUS"))
+                if bS > 0 and car <= 2 and car >= 0:
+                    heapq.heappush(
+                        slots, (-1 * (bike * biP + car * cP), "B,{},0".format(car))
+                    )
         if s == "12B":
             if bike > 0 and bS > 0:
                 maxU = bS // 12
@@ -85,8 +96,8 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed // 12
                 bike -= bUsed
                 # remainder
-                # if bike < 12 and bike > 0 and bS > 0:
-                #     heapq.heappush(slots, (-1 * bike * biP, "A"))
+                if bike < 12 and bike > 0 and bS > 0:
+                    heapq.heappush(slots, (-1 * bike * biP, "B,0,{}".format(bike)))
         if s == "1C7B":
             if bike > 0 and bS > 0 and car > 0:
                 maxU = bS
@@ -95,11 +106,51 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed
                 bike -= bUsed * 7
                 car -= bUsed
-                # if bike <= 2 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
-                #     heapq.heappush(slots, (-1 * (bike * biP + car * cP), "BUS"))
+                if bike <= 7 and bike >= 0 and bS > 0 and car <= 2 and car >= 0:
+                    heapq.heappush(
+                        slots,
+                        (-1 * (bike * biP + car * cP), "B,{},{}".format(car, bike)),
+                    )
         else:
-            pass
             # "These are remainder"
+            isBus, c, b = parsing(s)
+            if isBus:
+                if (bike > 0 or car > 0) and bS > 0:
+                    if bike > b and car > c:
+                        bike -= b
+                        car -= c
+                        profit += v
+                        bS -= 1
+                    else:
+                        minB = min(car, c)
+                        minC = min(bike, b)
+                        if bS > 0:
+                            heapq.heappush(
+                                slots,
+                                (
+                                    -1 * (minB * biP + minC * cP),
+                                    "B,{},{}".format(minC, minB),
+                                ),
+                            )
+            else:
+                if (bike > 0 or car > 0) and cS > 0:
+                    if bike > b and car > c:
+                        bike -= b
+                        car -= c
+                        profit += v
+                        cS -= 1
+                    else:
+                        minB = min(car, c)
+                        minC = min(bike, b)
+                        if cS > 0:
+                            heapq.heappush(
+                                slots,
+                                (
+                                    -1 * (minB * biP + minC * cP),
+                                    "B,{},{}".format(minC, minB),
+                                ),
+                            )
+
     res["Profit"] = profit * -1
     res["BusRejections"] = bus
     res["CarRejections"] = car
@@ -118,4 +169,10 @@ def getCommon():
     car = request.json["Cars"]
     bike = request.json["Bikes"]
 
-    return jsonify({"Answer": calcParking(busS, carS, charge, bus, car, bike)})
+    return jsonify(
+        {
+            "Answer": calcParking(
+                busS, carS, charge, max(bus, 0), max(car, 0), max(bike, 0)
+            )
+        }
+    )
