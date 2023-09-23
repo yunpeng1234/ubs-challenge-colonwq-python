@@ -143,6 +143,5 @@ def getCommon():
         print(sorted(counts), total)
         return jsonify(calculateRadians2(total, counts, 2 * pi))
     else:
-        return jsonify(
-            calcSplitChort(total, counts, currency, assetClass, region, sector)
-        )
+        return jsonify({})
+        # calcSplitChort(total, counts, currency, assetClass, region, sector)
