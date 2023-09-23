@@ -56,12 +56,14 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 profit += bUsed * v
                 bS -= bUsed
                 bus -= bUsed
+            continue
         if s == "C":
             if cS > 0 and car > 0:
                 cUsed = min(cS, car)
                 profit += cUsed * v
                 cS -= cUsed
                 car -= cUsed
+            continue
         elif s == "5B":
             if bike > 0 and cS > 0:
                 maxU = cS // 5
@@ -72,6 +74,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 # remainder
                 if bike < 5 and bike > 0 and cS > 0:
                     heapq.heappush(slots, (-1 * bike * biP, "C,0,{}".format(bike)))
+            continue
         elif s == "2C2B":
             if bike > 0 and bS > 0 and car > 0:
                 maxU = bS // 2
@@ -85,6 +88,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                         slots,
                         (-1 * (bike * biP + car * cP), "B,{},{}".format(car, bike)),
                     )
+            continue
         elif s == "2C":
             if bS > 0 and car > 0:
                 maxU = bS // 2
@@ -96,6 +100,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                     heapq.heappush(
                         slots, (-1 * (bike * biP + car * cP), "B,{},0".format(car))
                     )
+            continue
         elif s == "12B":
             if bike > 0 and bS > 0:
                 maxU = bS // 12
@@ -106,6 +111,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 # remainder
                 if bike < 12 and bike > 0 and bS > 0:
                     heapq.heappush(slots, (-1 * bike * biP, "B,0,{}".format(bike)))
+            continue
         elif s == "1C7B":
             if bike > 0 and bS > 0 and car > 0:
                 maxU = bS
@@ -119,6 +125,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                         slots,
                         (-1 * (bike * biP + car * cP), "B,{},{}".format(car, bike)),
                     )
+            continue
         else:
             # "These are remainder"
             isBus, c, b = parsing(s)
@@ -140,6 +147,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                                     "B,{},{}".format(minC, minB),
                                 ),
                             )
+                continue
             else:
                 if (bike > 0 or car > 0) and cS > 0:
                     if bike > b and car > c:
