@@ -31,10 +31,9 @@ def getFruit(max_weight, max_volume, fruit):
 
 @greedymonkey.route("/greedymonkey", methods=["POST"])
 def getCommon():
-    print("Start of eval")
     w = request.json["w"]
     v = request.json["v"]
     f = request.json["f"]
+    print(w, v, f)
     ans = getFruit(w, v, f)
-    print("end of function")
     return jsonify(ans)
