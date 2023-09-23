@@ -110,6 +110,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
 
 @parkinglot.route("/parking-lot", methods=["POST"])
 def getCommon():
+    print(request.json)
     busS = request.json["BusParkingSlots"]
     carS = request.json["CarParkingSlots"]
     charge = request.json["ParkingCharges"]
