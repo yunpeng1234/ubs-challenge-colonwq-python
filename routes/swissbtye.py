@@ -48,6 +48,9 @@ def getCommon():
     code = request.json["code"]
     cases = request.json["cases"]
     res = []
+    for i in range(len(code)):
+        code[i] == code[i].replace(" / ", " // ")
+
     for o in cases:
         vtoCount = set()
         env = {}
