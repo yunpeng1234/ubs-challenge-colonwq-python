@@ -47,8 +47,8 @@ def execute(prioritisation_function, passenger_data, cut_off_time, test_id):
     print("\n")
     return {
         "id": test_id,
-        "total_number_of_requests": totalNumberOfRequests,
-        "prioritised_filtered_list": prioritised_filtered_list,
+        "sortedDepartureTimes": totalNumberOfRequests,
+        "numberOfRequests": prioritised_filtered_list,
     }
 
 

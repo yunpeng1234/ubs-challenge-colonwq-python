@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, request
-from collections import deque
 
 
 digitalcolony = Blueprint("digitalcolony", __name__)
