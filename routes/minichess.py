@@ -529,7 +529,7 @@ def ab(gameboard):
     state = State(gameboard)
     alpha = -float("inf")
     beta = float("inf")
-    move, next_state = maxValue(state, alpha, beta, 5)
+    move, next_state = maxValue(state, alpha, beta, 4)
     return move
 
 

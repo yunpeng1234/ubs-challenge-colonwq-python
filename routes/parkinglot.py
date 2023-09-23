@@ -19,8 +19,12 @@ def pushOptimal(car, bike, cc, bc):
     c, d = min(car, 1), min(bike, 7)
     vB = c * cc + d * bc
     if vA >= vB:
-        return (-1 * vA, "B,{},{}".format(min(car, 1), min(bike, 7)))
-    return (-1 * vB, "B,{},{}".format(min(car, 2), min(bike, 2)))
+        print("B,{},{}".format(min(car, 2), min(bike, 2)), vA)
+
+        return (-1 * vA, "B,{},{}".format(min(car, 2), min(bike, 2)))
+    print("B,{},{}".format(min(car, 1), min(bike, 7)), vB)
+
+    return (-1 * vB, "B,{},{}".format(min(car, 1), min(bike, 7)))
 
 
 def calcParking(bS, cS, charges, bus, car, bike):
@@ -61,7 +65,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
     # Check optimal slot
     while len(slots) > 0:
         v, s = heapq.heappop(slots)
-        print(s)
+        print(s, "Strat")
         if s == "B":
             if bS > 0 and bus > 0:
                 bUsed = min(bS, bus)
@@ -147,14 +151,14 @@ def calcParking(bS, cS, charges, bus, car, bike):
             isBus, c, b = parsing(s)
             if isBus:
                 if (bike > 0 or car > 0) and bS > 0:
-                    if bike > b and car > c:
+                    if bike >= b and car >= c:
                         bike -= b
                         car -= c
                         profit += v
                         bS -= 1
                     else:
-                        minB = min(car, c)
-                        minC = min(bike, b)
+                        minC = min(car, c)
+                        minB = min(bike, b)
                         if bS > 0:
                             heapq.heappush(
                                 slots,
@@ -167,14 +171,14 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 continue
             else:
                 if (bike > 0 or car > 0) and cS > 0:
-                    if bike > b and car > c:
+                    if bike >= b and car >= c:
                         bike -= b
                         car -= c
                         profit += v
                         cS -= 1
                     else:
-                        minB = min(car, c)
-                        minC = min(bike, b)
+                        minC = min(car, c)
+                        minB = min(bike, b)
                         if cS > 0:
                             heapq.heappush(
                                 slots,
