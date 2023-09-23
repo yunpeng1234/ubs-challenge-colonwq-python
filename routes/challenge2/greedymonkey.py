@@ -28,7 +28,7 @@ def getFruit(max_weight, max_volume, fruit):
 # print(getFruit(100, 150, f))
 
 
-@greedymonkey.route("/greedyMonkey", methods=["POST"])
+@greedymonkey.route("/greedymonkey", methods=["POST"])
 def getCommon():
     w = request.json["w"]
     v = request.json["v"]
