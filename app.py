@@ -7,6 +7,7 @@ from routes.swissbtye import swissbyte
 from routes.maze import maze
 from routes.chinesewall import chinesewall
 from routes.piechart import piechart
+from routes.parkinglot import parkinglot
 
 import logging
 
@@ -27,7 +28,7 @@ app.register_blueprint(swissbyte)
 app.register_blueprint(maze)
 app.register_blueprint(chinesewall)
 app.register_blueprint(piechart)
-
+app.register_blueprint(parkinglot)
 
 # logger = logging.getLogger()
 # handler = logging.StreamHandler()
