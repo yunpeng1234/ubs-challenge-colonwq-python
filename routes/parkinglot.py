@@ -6,7 +6,6 @@ parkinglot = Blueprint("parkinglot", __name__)
 
 
 def parsing(stro):
-    print(stro, "HELP")
     a, b, c = stro.split(",")
 
     return (a == "B", int(b), int(c))
@@ -83,15 +82,13 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed
                 bike -= bUsed * 2
                 car -= bUsed * 2
-                print("HERE")
                 if bike == 0 and car == 0:
                     continue
                 if bike >= 0 and bS > 0 and car >= 0:
-                    print("HERE")
                     heapq.heappush(
                         slots,
                         (
-                            -1 * (bike * biP + car * cP),
+                            -1 * (min(bike, 2) * biP + min(car, 2) * cP),
                             "B,{},{}".format(min(car, 2), min(bike, 2)),
                         ),
                     )
@@ -115,8 +112,10 @@ def calcParking(bS, cS, charges, bus, car, bike):
                 bS -= bUsed
                 bike -= bUsed * 12
                 # remainder
+
                 if bike < 12 and bike > 0 and bS > 0:
                     heapq.heappush(slots, (-1 * bike * biP, "B,0,{}".format(bike)))
+
             continue
         elif s == "1C7B":
             if bike > 0 and bS > 0 and car > 0:
@@ -132,7 +131,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                     heapq.heappush(
                         slots,
                         (
-                            -1 * (bike * biP + car * cP),
+                            -1 * (min(bike, 7) * biP + min(car, 1) * cP),
                             "B,{},{}".format(min(car, 1), min(bike, 7)),
                         ),
                     )
@@ -151,6 +150,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                         minB = min(car, c)
                         minC = min(bike, b)
                         if bS > 0:
+                            print(bike, car)
                             heapq.heappush(
                                 slots,
                                 (
@@ -158,6 +158,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                                     "B,{},{}".format(minC, minB),
                                 ),
                             )
+                            print("B,{},{}".format(minC, minB), s)
                 continue
             else:
                 if (bike > 0 or car > 0) and cS > 0:
@@ -177,6 +178,7 @@ def calcParking(bS, cS, charges, bus, car, bike):
                                     "B,{},{}".format(minC, minB),
                                 ),
                             )
+                            print("B,{},{}".format(minC, minB), s)
 
     res["Profit"] = profit * -1
     res["BusRejections"] = bus
