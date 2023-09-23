@@ -27,7 +27,6 @@ def traverseNested(code, line, env):
                     if code[line] == "endif":
                         endifcount -= 1
                     line += 1
-                continue
             else:
                 newLine, isFailed = traverseNested(code, line, env)
                 if not isFailed:
@@ -49,9 +48,7 @@ def getCommon():
     code = request.json["code"]
     cases = request.json["cases"]
     res = []
-    print(code)
     for o in cases:
-        print(o)
         vtoCount = set()
         env = {}
         for x, y in o.items():
