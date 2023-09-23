@@ -96,10 +96,10 @@ def prioritisation_function(passengers, cut_off_time):
     for p in passengers:
         if p.askTimeToDeparture() <= cut_off_time:
             okToUse.append(p)
-    mergeSort(passengers)
+    mergeSort(okToUse)
     # your solution here
     # return sorted array of passenger instances
-    return passengers
+    return okToUse
 
 
 @airport.route("/airport", methods=["POST"])
