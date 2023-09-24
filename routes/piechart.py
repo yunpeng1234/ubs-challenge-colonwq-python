@@ -25,8 +25,9 @@ def calculateRadiansSmallArc(total, qtys, maxRadians, starting):
             total -= qty
         else:
             res.append(res[-1] - ((qty / total) * maxRadians))
+    x = list(map(lambda x: round(x, 8), res))
 
-    return res
+    return x
 
 
 def calculateRadians(total, qtys, maxRadians):
@@ -39,8 +40,9 @@ def calculateRadians(total, qtys, maxRadians):
             total -= qty
         else:
             res.append(res[-1] + ((qty / total) * maxRadians))
+    x = list(map(lambda x: round(x, 8), res))
 
-    return {"instruments": res}
+    return {"instruments": x}
 
 
 # Write from the back smallest to largest
