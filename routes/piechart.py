@@ -26,8 +26,7 @@ def calculateRadiansSmallArc(total, qtys, maxRadians, starting):
         else:
             res.append(res[-1] - ((qty / total) * maxRadians))
 
-    newR = list(map(lambda x: round(x, 8), res))
-    return newR
+    return res
 
 
 def calculateRadians(total, qtys, maxRadians):
@@ -41,27 +40,28 @@ def calculateRadians(total, qtys, maxRadians):
         else:
             res.append(res[-1] + ((qty / total) * maxRadians))
 
-    newR = list(map(lambda x: round(x, 8), res))
-    return {"instruments": newR}
+    return {"instruments": res}
 
 
 # Write from the back smallest to largest
 def calculateRadians2(total, qtys, maxRadians):
     qtys.sort()
-    res = [2 * pi]
+    res = []
     counter = 0
     for qty in qtys:
         if qty / total < 0.0005:
             counter += 1
-            res.append(res[-1] - MIN_CHORD)
+            res.append(MIN_CHORD)
             maxRadians -= MIN_CHORD
             total -= qty
         else:
-            res.append(res[-1] - ((qty / total) * maxRadians))
-    print(counter, len(qtys))
-    newR = list(map(lambda x: round(x, 8), res))
-    newR[-1] = 0.0
-    return {"instruments": newR[::-1]}
+            res.append(((qty / total) * maxRadians))
+    newS = [0.0]
+    te = res[::-1]
+
+    for i in range(len(res)):
+        newS.append(newS[i] + te[i])
+    return {"instruments": newS}
 
 
 # def checkMinimum(total, min, checkAgainst):
@@ -77,10 +77,6 @@ def calcSplitChord(total, qty, cm, am, rm, sm):
     res = calculateRadians(total, qty, maxRadians=pi * 2 / 3)
     print(res)
     # Get the smallest for each given arc
-    cMin = min(cm.values())
-    aMin = min(cm.values())
-    rMin = min(rm.values())
-    sMin = min(sm.values())
 
     # tempH = {}
     # tempH["c"] = cMin
