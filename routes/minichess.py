@@ -68,22 +68,22 @@ class Rook(Piece):
 
     def moves(self, board):
         res = []
-        maxWidth = len(board[0])
-        maxHeight = len(board)
-        maxDist = max(maxWidth, maxHeight)
-        for x, y in self.horiVert:
-            for dist in range(1, maxDist):
-                tempX = x * dist + self.position[0]
-                tempY = y * dist + self.position[1]
-                if tempX >= 0 and tempX < maxHeight and tempY >= 0 and tempY < maxWidth:
-                    if board[tempX][tempY] != self.color:
-                        if board[tempX][tempY] == opponentColor(self.color):
-                            res.append((tempX, tempY))
-                            break
-                        else:
-                            res.append((tempX, tempY))
-                    elif board[tempX][tempY] == self.color:
-                        break
+        # maxWidth = len(board[0])
+        # maxHeight = len(board)
+        # maxDist = max(maxWidth, maxHeight)
+        # for x, y in self.horiVert:
+        #     for dist in range(1, maxDist):
+        #         tempX = x * dist + self.position[0]
+        #         tempY = y * dist + self.position[1]
+        #         if tempX >= 0 and tempX < maxHeight and tempY >= 0 and tempY < maxWidth:
+        #             if board[tempX][tempY] != self.color:
+        #                 if board[tempX][tempY] == opponentColor(self.color):
+        #                     res.append((tempX, tempY))
+        #                     break
+        #                 else:
+        #                     res.append((tempX, tempY))
+        #             elif board[tempX][tempY] == self.color:
+        #                 break
         return res
 
 
@@ -163,19 +163,19 @@ class Queen(Piece):
                             res.append((tempX, tempY))
                     elif board[tempX][tempY] == self.color:
                         break
-        for x, y in self.diag:
-            for dist in range(1, maxDist):
-                tempX = x * dist + self.position[0]
-                tempY = y * dist + self.position[1]
-                if tempX >= 0 and tempX < maxHeight and tempY >= 0 and tempY < maxWidth:
-                    if board[tempX][tempY] != self.color:
-                        if board[tempX][tempY] == opponentColor(self.color):
-                            res.append((tempX, tempY))
-                            break
-                        else:
-                            res.append((tempX, tempY))
-                    elif board[tempX][tempY] == self.color:
-                        break
+        # for x, y in self.diag:
+        #     for dist in range(1, maxDist):
+        #         tempX = x * dist + self.position[0]
+        #         tempY = y * dist + self.position[1]
+        #         if tempX >= 0 and tempX < maxHeight and tempY >= 0 and tempY < maxWidth:
+        #             if board[tempX][tempY] != self.color:
+        #                 if board[tempX][tempY] == opponentColor(self.color):
+        #                     res.append((tempX, tempY))
+        #                     break
+        #                 else:
+        #                     res.append((tempX, tempY))
+        #             elif board[tempX][tempY] == self.color:
+        #                 break
         return res
 
     pass
