@@ -51,5 +51,5 @@ def getCommon():
     k = request.json["k"]
     p = request.json["p"]
     q = request.json["q"]
-
+    print(k, p, q)
     return jsonify(minimum_distance_teleportation(k, p, q))
