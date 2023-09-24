@@ -3,41 +3,47 @@ from flask import Blueprint, render_template, session, jsonify, request, make_re
 teleport = Blueprint("teleport", __name__)
 
 import math
+import heapq
+
+
+def distance(o, n):
+    ox, oy = o
+    nx, ny = n
+    return math.sqrt(abs(ox - nx) ** 2 + abs(oy - ny) ** 2)
 
 
 def minimum_distance_teleportation(k, p, q):
     # Sort teleportation hubs by their Euclidean distance from the starting point
-    p.sort(key=lambda hub: math.sqrt(hub[0] ** 2 + hub[1] ** 2))
+    # Pair storing hub, location (1 pair only)
+    locationClosest = {}
+    for hub in p:
+        hx, hy = hub
+        for location in q:
+            ox, oy = location
+            if (ox, oy) in locationClosest:
+                oldDistance = distance(location, locationClosest[(ox, oy)])
+                newDistance = distance(hub, location)
+                if newDistance < oldDistance:
+                    locationClosest[(ox, oy)] = (hx, hy)
+            else:
+                locationClosest[(ox, oy)] = (hx, hy)
 
-    total_distance = 0.0
-    remaining_items = q.copy()
+    distanceSaved = []
+    res = 0
+    prev = (0, 0)
+    for t in q:
+        ox, oy = t
+        possibleSaved = locationClosest[(ox, oy)]
+        noTeleDistance = distance(prev, t)
+        teleDistance = distance(possibleSaved, t)
+        heapq.heappush(distanceSaved, max(noTeleDistance - teleDistance, 0))
+        res += noTeleDistance
+        prev = t
+    k = min(k, len(q))
 
-    while len(remaining_items) > 0:
-        if k > 0:
-            # Use a teleportation orb if available
-            closest_hub = p[0]
-            k -= 1
-        else:
-            # Walk to the nearest teleportation hub
-            closest_hub = min(
-                p,
-                key=lambda hub: math.sqrt(
-                    (hub[0] - remaining_items[0][0]) ** 2
-                    + (hub[1] - remaining_items[0][1]) ** 2
-                ),
-            )
+    possibleSaved = sum(heapq.nlargest(k, distanceSaved))
 
-        # Calculate the Euclidean distance from the current location to the next item's location
-        distance = math.sqrt(
-            (closest_hub[0] - remaining_items[0][0]) ** 2
-            + (closest_hub[1] - remaining_items[0][1]) ** 2
-        )
-
-        # Update total distance and remove the delivered item from the list
-        total_distance += distance
-        remaining_items.pop(0)
-
-    return round(total_distance, 2)
+    return res - possibleSaved
 
 
 @teleport.route("/teleportation", methods=["POST"])
