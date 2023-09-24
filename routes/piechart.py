@@ -62,7 +62,7 @@ def calculateRadians2(total, qtys, maxRadians):
     for i in range(len(res)):
         newS.append(newS[i] + te[i])
     x = list(map(lambda x: round(x, 8), newS))
-    return {"instruments": newS}
+    return {"instruments": x}
 
 
 # def checkMinimum(total, min, checkAgainst):
