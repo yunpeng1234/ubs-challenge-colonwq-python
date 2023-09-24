@@ -3,7 +3,7 @@ from math import pi
 
 piechart = Blueprint("piechart", __name__)
 
-MIN_CHORD = 0.00314159
+MIN_CHORD = 1 / 1000 * pi
 
 
 def counting(res):
