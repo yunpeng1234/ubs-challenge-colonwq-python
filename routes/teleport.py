@@ -9,7 +9,7 @@ import heapq
 def distance(o, n):
     ox, oy = o
     nx, ny = n
-    return math.sqrt(abs(ox - nx) ** 2 + abs(oy - ny) ** 2)
+    return abs(ox - nx) ** 2 + abs(oy - ny) ** 2
 
 
 def minimum_distance_teleportation(k, p, q):
@@ -34,8 +34,8 @@ def minimum_distance_teleportation(k, p, q):
     for t in q:
         ox, oy = t
         possibleSaved = locationClosest[(ox, oy)]
-        noTeleDistance = distance(prev, t)
-        teleDistance = distance(possibleSaved, t)
+        noTeleDistance = math.sqrt(distance(prev, t))
+        teleDistance = math.sqrt(distance(possibleSaved, t))
         heapq.heappush(distanceSaved, max(noTeleDistance - teleDistance, 0))
         res += noTeleDistance
         prev = t
